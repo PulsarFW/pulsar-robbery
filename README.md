@@ -20,7 +20,7 @@ Configurable robbery system supporting multiple locations including Fleeca branc
 
 ## License
 
-Copyright © 2024 Pulsar Framework. All rights reserved.
+Copyright © 2026 Pulsar Framework. All rights reserved.
 
 <div align="center">
 
