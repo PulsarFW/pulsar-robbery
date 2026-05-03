@@ -535,7 +535,7 @@ AddEventHandler("Robbery:Server:Setup", function()
 						GlobalState["LombankInProgress"] = true
 
 						if exports.ox_inventory:ItemsHas(char:GetData("SID"), "thermite", 1) then
-							if exports.ox_inventory:Remove(char:GetData("SID"), "thermite", 1) then
+							if exports.ox_inventory:Remove(char:GetData("SID"), 1, "thermite", 1) then
 								exports['pulsar-core']:LoggerInfo(
 									"Robbery",
 									string.format(
