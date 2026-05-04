@@ -222,7 +222,7 @@ AddEventHandler("Robbery:Server:Setup", function()
 						_pbInUse.powerBoxes[data.boxId] = source
 						GlobalState["PaletoInProgress"] = true
 
-						if exports.ox_inventory:ItemsHas(char:GetData("SID"), 1, "adv_electronics_kit", 1) then
+						if exports.ox_inventory:ItemsHas(char:GetData("SID"), "adv_electronics_kit", 1) then
 							local slot = exports.ox_inventory:ItemsGetFirst(char:GetData("SID"),
 								"adv_electronics_kit", 1)
 							local itemData = exports.ox_inventory:ItemsGetData("adv_electronics_kit")
@@ -369,7 +369,7 @@ AddEventHandler("Robbery:Server:Setup", function()
 						_pbInUse.pcHacks[data.pcId] = source
 						GlobalState["PaletoInProgress"] = true
 
-						if exports.ox_inventory:ItemsHas(char:GetData("SID"), 1, "adv_electronics_kit", 1) then
+						if exports.ox_inventory:ItemsHas(char:GetData("SID"), "adv_electronics_kit", 1) then
 							local slot = exports.ox_inventory:ItemsGetFirst(char:GetData("SID"),
 								"adv_electronics_kit", 1)
 							local itemData = exports.ox_inventory:ItemsGetData("adv_electronics_kit")
@@ -506,8 +506,8 @@ AddEventHandler("Robbery:Server:Setup", function()
 						GlobalState["PaletoInProgress"] = true
 
 						if
-							exports.ox_inventory:ItemsHas(char:GetData("SID"), 1, 'vpn', 1)
-							and exports.ox_inventory:ItemsHas(char:GetData("SID"), 1, "adv_electronics_kit", 1)
+							exports.ox_inventory:ItemsHas(char:GetData("SID"), 'vpn', 1)
+							and exports.ox_inventory:ItemsHas(char:GetData("SID"), "adv_electronics_kit", 1)
 						then
 							local slot = exports.ox_inventory:ItemsGetFirst(char:GetData("SID"),
 								"adv_electronics_kit", 1)
@@ -635,7 +635,7 @@ AddEventHandler("Robbery:Server:Setup", function()
 						_pbInUse.officeHacks[data.officeId] = source
 						GlobalState["PaletoInProgress"] = true
 
-						if exports.ox_inventory:ItemsHas(char:GetData("SID"), 1, "adv_electronics_kit", 1) then
+						if exports.ox_inventory:ItemsHas(char:GetData("SID"), "adv_electronics_kit", 1) then
 							local slot = exports.ox_inventory:ItemsGetFirst(char:GetData("SID"),
 								"adv_electronics_kit", 1)
 							local itemData = exports.ox_inventory:ItemsGetData("adv_electronics_kit")
@@ -770,7 +770,7 @@ AddEventHandler("Robbery:Server:Setup", function()
 						_pbInUse.drillPoints[data] = source
 						GlobalState["PaletoInProgress"] = true
 
-						if exports.ox_inventory:ItemsHas(char:GetData("SID"), 1, "drill", 1) then
+						if exports.ox_inventory:ItemsHas(char:GetData("SID"), "drill", 1) then
 							local slot = exports.ox_inventory:ItemsGetFirst(char:GetData("SID"), "drill", 1)
 							local itemData = exports.ox_inventory:ItemsGetData("drill")
 

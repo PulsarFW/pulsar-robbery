@@ -171,7 +171,7 @@ AddEventHandler("Robbery:Server:Setup", function()
 					_inUse.Loot[data.id] = source
 					GlobalState["MazeBankInProgress"] = true
 
-					if exports.ox_inventory:ItemsHas(char:GetData("SID"), 1, "drill", 1) then
+					if exports.ox_inventory:ItemsHas(char:GetData("SID"), "drill", 1) then
 						local slot = exports.ox_inventory:ItemsGetFirst(char:GetData("SID"), "drill", 1)
 						local itemData = exports.ox_inventory:ItemsGetData("drill")
 

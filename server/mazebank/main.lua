@@ -225,7 +225,7 @@ AddEventHandler("Robbery:Server:Setup", function()
 					_mbInUse.powerBoxes[data.boxId] = source
 					GlobalState["MazeBankInProgress"] = true
 
-					if exports.ox_inventory:ItemsHas(char:GetData("SID"), 1, "adv_electronics_kit", 1) then
+					if exports.ox_inventory:ItemsHas(char:GetData("SID"), "adv_electronics_kit", 1) then
 						local slot = exports.ox_inventory:ItemsGetFirst(char:GetData("SID"),
 							"adv_electronics_kit", 1)
 						local itemData = exports.ox_inventory:ItemsGetData("adv_electronics_kit")
@@ -431,7 +431,7 @@ AddEventHandler("Robbery:Server:Setup", function()
 						_mbInUse.powerBoxes[data.boxId] = source
 						GlobalState["MazeBankInProgress"] = true
 
-						if exports.ox_inventory:ItemsHas(char:GetData("SID"), 1, "thermite", 1) then
+						if exports.ox_inventory:ItemsHas(char:GetData("SID"), "thermite", 1) then
 							if exports.ox_inventory:Remove(char:GetData("SID"), 1, "thermite", 1) then
 								exports['pulsar-core']:LoggerInfo(
 									"Robbery",
@@ -618,7 +618,7 @@ AddEventHandler("Robbery:Server:Setup", function()
 					_mbInUse.drillPoints[data] = source
 					GlobalState["MazeBankInProgress"] = true
 
-					if exports.ox_inventory:ItemsHas(char:GetData("SID"), 1, "drill", 1) then
+					if exports.ox_inventory:ItemsHas(char:GetData("SID"), "drill", 1) then
 						local slot = exports.ox_inventory:ItemsGetFirst(char:GetData("SID"), "drill", 1)
 						local itemData = exports.ox_inventory:ItemsGetData("drill")
 
@@ -748,7 +748,7 @@ AddEventHandler("Robbery:Server:Setup", function()
 					_mbInUse.officePcs[data.id] = source
 					GlobalState["MazeBankInProgress"] = true
 
-					if exports.ox_inventory:ItemsHas(char:GetData("SID"), 1, "adv_electronics_kit", 1) then
+					if exports.ox_inventory:ItemsHas(char:GetData("SID"), "adv_electronics_kit", 1) then
 						local slot = exports.ox_inventory:ItemsGetFirst(char:GetData("SID"),
 							"adv_electronics_kit", 1)
 						local itemData = exports.ox_inventory:ItemsGetData("adv_electronics_kit")
