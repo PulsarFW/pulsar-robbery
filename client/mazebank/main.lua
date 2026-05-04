@@ -106,12 +106,12 @@ AddEventHandler("Robbery:Client:Setup", function()
 						onSelect = function()
 							TriggerEvent("Robbery:Client:MazeBank:ElectricBox:Thermite", v.data)
 						end,
-						canInteract = function(entity, data)
+						canInteract = function()
 							return not GlobalState["MazeBank:Secured"]
 								and (
-									not GlobalState[string.format("MazeBank:Power:%s", data.boxId)]
+									not GlobalState[string.format("MazeBank:Power:%s", v.data.boxId)]
 									or GetCloudTimeAsInt()
-									> GlobalState[string.format("MazeBank:Power:%s", data.boxId)]
+									> GlobalState[string.format("MazeBank:Power:%s", v.data.boxId)]
 								)
 						end,
 					},
@@ -125,12 +125,12 @@ AddEventHandler("Robbery:Client:Setup", function()
 						onSelect = function()
 							TriggerEvent("Robbery:Client:MazeBank:ElectricBox:Hack", v.data)
 						end,
-						canInteract = function(entity, data)
+						canInteract = function()
 							return not GlobalState["MazeBank:Secured"]
 								and (
-									not GlobalState[string.format("MazeBank:Power:%s", data.boxId)]
+									not GlobalState[string.format("MazeBank:Power:%s", v.data.boxId)]
 									or GetCloudTimeAsInt()
-									> GlobalState[string.format("MazeBank:Power:%s", data.boxId)]
+									> GlobalState[string.format("MazeBank:Power:%s", v.data.boxId)]
 								)
 						end,
 					},
@@ -156,12 +156,12 @@ AddEventHandler("Robbery:Client:Setup", function()
 					onSelect = function(data)
 						TriggerEvent("Robbery:Client:MazeBank:Drill", data.wallId)
 					end,
-					canInteract = function(entity, data)
+					canInteract = function()
 						return not GlobalState["MazeBank:Secured"]
 							and (
-								not GlobalState[string.format("MazeBank:Vault:Wall:%s", data.wallId)]
+								not GlobalState[string.format("MazeBank:Vault:Wall:%s", v.data.wallId)]
 								or GetCloudTimeAsInt()
-								> GlobalState[string.format("MazeBank:Vault:Wall:%s", data.wallId)]
+								> GlobalState[string.format("MazeBank:Vault:Wall:%s", v.data.wallId)]
 							)
 					end,
 				},
@@ -187,12 +187,12 @@ AddEventHandler("Robbery:Client:Setup", function()
 					onSelect = function(data)
 						TriggerEvent("Robbery:Client:MazeBank:PC:Hack", data.deskId)
 					end,
-					canInteract = function(entity, data)
+					canInteract = function()
 						return not GlobalState["MazeBank:Secured"]
 							and (
-								not GlobalState[string.format("MazeBank:Offices:PC:%s", data.deskId)]
+								not GlobalState[string.format("MazeBank:Offices:PC:%s", v.data.deskId)]
 								or GetCloudTimeAsInt()
-								> GlobalState[string.format("MazeBank:Offices:PC:%s", data.deskId)]
+								> GlobalState[string.format("MazeBank:Offices:PC:%s", v.data.deskId)]
 							)
 					end,
 				},

@@ -166,13 +166,13 @@ AddEventHandler("Robbery:Client:Setup", function()
 							end
 						end)
 					end,
-					canInteract = function(entity, data)
+					canInteract = function()
 						return LocalPlayer.state.inBobcat
 							and GlobalState["Bobcat:ExtrDoor"]
 							and GlobalState["Bobcat:FrontDoor"]
 							and GlobalState["Bobcat:SecuredDoor"]
 							and GlobalState["Bobcat:VaultDoor"]
-							and not GlobalState[string.format("Bobcat:Loot:%s", data.lootId)]
+							and not GlobalState[string.format("Bobcat:Loot:%s", v.data.id)]
 					end,
 				},
 			}

@@ -208,11 +208,11 @@ AddEventHandler("Robbery:Client:Setup", function()
 					onSelect = function()
 						TriggerEvent("Robbery:Client:Paleto:OfficeHack", v.data)
 					end,
-					canInteract = function(entity, data)
+					canInteract = function()
 						return IsPaletoExploitInstalled()
 							and (
-								not _bankStates.paleto.officeHacks[data.officeId]
-								or GetCloudTimeAsInt() > _bankStates.paleto.officeHacks[data.officeId]
+								not _bankStates.paleto.officeHacks[v.data.officeId]
+								or GetCloudTimeAsInt() > _bankStates.paleto.officeHacks[v.data.officeId]
 							)
 					end,
 				},
@@ -238,9 +238,9 @@ AddEventHandler("Robbery:Client:Setup", function()
 					onSelect = function()
 						TriggerEvent("Robbery:Client:Paleto:ElectricBox:Hack", v.data)
 					end,
-					canInteract = function(entity, data)
-						return not _bankStates.paleto.electricalBoxes[data.boxId]
-							or GetCloudTimeAsInt() > _bankStates.paleto.electricalBoxes[data.boxId]
+					canInteract = function()
+						return not _bankStates.paleto.electricalBoxes[v.data.boxId]
+							or GetCloudTimeAsInt() > _bankStates.paleto.electricalBoxes[v.data.boxId]
 					end,
 				},
 			}
@@ -280,12 +280,12 @@ AddEventHandler("Robbery:Client:Setup", function()
 					onSelect = function()
 						TriggerEvent("Robbery:Client:Paleto:Drill", v.data)
 					end,
-					canInteract = function(entity, data)
+					canInteract = function()
 						return IsPaletoExploitInstalled()
 							and not exports['ox_doorlock']:IsLocked("bank_savings_paleto_vault")
 							and (
-								not _bankStates.paleto.drillPoints[data.drillId]
-								or GetCloudTimeAsInt() > _bankStates.paleto.drillPoints[data.drillId]
+								not _bankStates.paleto.drillPoints[v.data.drillId]
+								or GetCloudTimeAsInt() > _bankStates.paleto.drillPoints[v.data.drillId]
 							)
 					end,
 				},
@@ -334,12 +334,12 @@ AddEventHandler("Robbery:Client:Setup", function()
 					onSelect = function()
 						TriggerEvent("Robbery:Client:Paleto:Search", v.data)
 					end,
-					canInteract = function(entity, data)
+					canInteract = function()
 						return IsPaletoExploitInstalled()
-							and not exports['ox_doorlock']:IsLocked(data.door)
+							and not exports['ox_doorlock']:IsLocked(v.data.door)
 							and (
-								not _bankStates.paleto.officeSearch[data.searchId]
-								or GetCloudTimeAsInt() > _bankStates.paleto.officeSearch[data.searchId]
+								not _bankStates.paleto.officeSearch[v.data.searchId]
+								or GetCloudTimeAsInt() > _bankStates.paleto.officeSearch[v.data.searchId]
 							)
 					end,
 				},

@@ -38,20 +38,15 @@ AddEventHandler("Robbery:Client:Setup", function()
 						onSelect = function(data)
 							TriggerEvent("Robbery:Client:Fleeca:StartSecuring", data.bankId)
 						end,
-						canInteract = function(entity, data)
+						canInteract = function()
+							local fleeca = LocalPlayer.state.fleeca
+							local vaultDoor = GlobalState[string.format("Fleeca:%s:VaultDoor", fleeca)]
 							return (
 								(
-									GlobalState[string.format("Fleeca:%s:VaultDoor", LocalPlayer.state.fleeca)]
-									~= nil
-									and GlobalState[string.format("Fleeca:%s:VaultDoor", data.bankId)].state == 2
-									or GlobalState[string.format(
-										"Fleeca:%s:VaultDoor",
-										LocalPlayer.state.fleeca
-									)]
-									~= nil
-									and GlobalState[string.format("Fleeca:%s:VaultDoor", data.bankId)].state == 3
+									vaultDoor ~= nil
+									and (vaultDoor.state == 2 or vaultDoor.state == 3)
 								)
-								or (not exports['ox_doorlock']:IsLocked(string.format("%s_gate", LocalPlayer.state.fleeca)))
+								or not exports['ox_doorlock']:IsLocked(string.format("%s_gate", fleeca))
 							)
 						end,
 					},
@@ -203,19 +198,14 @@ function SetupFleecaVaults(bankData)
 					onSelect = function(data)
 						TriggerEvent("Robbery:Client:Fleeca:Drill", data.bankId, { id = data.lootName, index = data.lootIndex })
 					end,
-					canInteract = function(entity, data)
-						return GlobalState[string.format("Fleeca:%s:VaultDoor", LocalPlayer.state.fleeca)] ~= nil
-							and GlobalState[string.format("Fleeca:%s:VaultDoor", LocalPlayer.state.fleeca)].state == 3
-							and (GlobalState[string.format(
-								"Fleeca:%s:Loot:%s",
-								LocalPlayer.state.fleeca,
-								data.lootName
-							)] == nil or GetCloudTimeAsInt() >= GlobalState[string.format(
-								"Fleeca:%s:Loot:%s",
-								LocalPlayer.state.fleeca,
-								data.lootName
-							)])
-							and (data.lootIndex <= 2 or not exports['ox_doorlock']:IsLocked(string.format("%s_gate", LocalPlayer.state.fleeca)))
+					canInteract = function()
+						local fleeca = LocalPlayer.state.fleeca
+						local vaultDoor = GlobalState[string.format("Fleeca:%s:VaultDoor", fleeca)]
+						local lootKey = string.format("Fleeca:%s:Loot:%s", fleeca, v.options.name)
+						return vaultDoor ~= nil
+							and vaultDoor.state == 3
+							and (GlobalState[lootKey] == nil or GetCloudTimeAsInt() >= GlobalState[lootKey])
+							and (k <= 2 or not exports['ox_doorlock']:IsLocked(string.format("%s_gate", fleeca)))
 					end,
 				},
 			}
