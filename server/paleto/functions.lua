@@ -1,7 +1,10 @@
 function PaletoIsGloballyReady(source, isHack)
 	if
-		GetGameTimer() < PALETO_SERVER_START_WAIT
-		or (GlobalState["RestartLockdown"] and not GlobalState["PaletoInProgress"])
+		GlobalState["RestartLockdown"] ~= false
+		and (
+			GetGameTimer() < PALETO_SERVER_START_WAIT
+			or (GlobalState["RestartLockdown"] and not GlobalState["PaletoInProgress"])
+		)
 	then
 		if isHack then
 			exports['pulsar-hud']:Notification(source, "error",

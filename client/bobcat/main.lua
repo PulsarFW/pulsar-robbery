@@ -158,7 +158,7 @@ AddEventHandler("Robbery:Client:Setup", function()
 				{
 					icon = "fas fa-hand-paper",
 					label = "Grab Loot",
-					event = "Robbery:Client:Bobcat:GrabLoot",
+					lootId = v.data.id,
 					onSelect = function()
 						exports["pulsar-core"]:ServerCallback("Robbery:Bobcat:CheckLoot", v.data, function(s)
 							if s then
@@ -166,13 +166,13 @@ AddEventHandler("Robbery:Client:Setup", function()
 							end
 						end)
 					end,
-					canInteract = function()
+					canInteract = function(entity, data)
 						return LocalPlayer.state.inBobcat
 							and GlobalState["Bobcat:ExtrDoor"]
 							and GlobalState["Bobcat:FrontDoor"]
 							and GlobalState["Bobcat:SecuredDoor"]
 							and GlobalState["Bobcat:VaultDoor"]
-							and not GlobalState[string.format("Bobcat:Loot:%s", v.data.id)]
+							and not GlobalState[string.format("Bobcat:Loot:%s", data.lootId)]
 					end,
 				},
 			}

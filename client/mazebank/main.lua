@@ -102,10 +102,11 @@ AddEventHandler("Robbery:Client:Setup", function()
 						icon = "fas fa-fire",
 						label = "Use Thermite",
 						item = "thermite",
+						boxId = v.data.boxId,
 						onSelect = function()
 							TriggerEvent("Robbery:Client:MazeBank:ElectricBox:Thermite", v.data)
 						end,
-						canInteract = function(data)
+						canInteract = function(entity, data)
 							return not GlobalState["MazeBank:Secured"]
 								and (
 									not GlobalState[string.format("MazeBank:Power:%s", data.boxId)]
@@ -120,10 +121,11 @@ AddEventHandler("Robbery:Client:Setup", function()
 						icon = "fas fa-terminal",
 						label = "Hack Power Interface",
 						item = "adv_electronics_kit",
+						boxId = v.data.boxId,
 						onSelect = function()
 							TriggerEvent("Robbery:Client:MazeBank:ElectricBox:Hack", v.data)
 						end,
-						canInteract = function(data)
+						canInteract = function(entity, data)
 							return not GlobalState["MazeBank:Secured"]
 								and (
 									not GlobalState[string.format("MazeBank:Power:%s", data.boxId)]
@@ -150,15 +152,16 @@ AddEventHandler("Robbery:Client:Setup", function()
 					icon = "fas fa-drill",
 					label = "Use Drill",
 					item = "drill",
-					onSelect = function()
-						TriggerEvent("Robbery:Client:MazeBank:Drill", v.data.wallId)
+					wallId = v.data.wallId,
+					onSelect = function(data)
+						TriggerEvent("Robbery:Client:MazeBank:Drill", data.wallId)
 					end,
-					canInteract = function(data)
+					canInteract = function(entity, data)
 						return not GlobalState["MazeBank:Secured"]
 							and (
-								not GlobalState[string.format("MazeBank:Vault:Wall:%s", data.id)]
+								not GlobalState[string.format("MazeBank:Vault:Wall:%s", data.wallId)]
 								or GetCloudTimeAsInt()
-								> GlobalState[string.format("MazeBank:Vault:Wall:%s", data.id)]
+								> GlobalState[string.format("MazeBank:Vault:Wall:%s", data.wallId)]
 							)
 					end,
 				},
@@ -180,15 +183,16 @@ AddEventHandler("Robbery:Client:Setup", function()
 					icon = "fas fa-terminal",
 					label = "Hack Workstation",
 					item = "adv_electronics_kit",
-					onSelect = function()
-						TriggerEvent("Robbery:Client:MazeBank:PC:Hack", v.data.deskId)
+					deskId = v.data.deskId,
+					onSelect = function(data)
+						TriggerEvent("Robbery:Client:MazeBank:PC:Hack", data.deskId)
 					end,
-					canInteract = function(data)
+					canInteract = function(entity, data)
 						return not GlobalState["MazeBank:Secured"]
 							and (
-								not GlobalState[string.format("MazeBank:Offices:PC:%s", data.id)]
+								not GlobalState[string.format("MazeBank:Offices:PC:%s", data.deskId)]
 								or GetCloudTimeAsInt()
-								> GlobalState[string.format("MazeBank:Offices:PC:%s", data.id)]
+								> GlobalState[string.format("MazeBank:Offices:PC:%s", data.deskId)]
 							)
 					end,
 				},

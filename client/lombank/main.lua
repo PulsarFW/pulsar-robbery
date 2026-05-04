@@ -136,13 +136,14 @@ AddEventHandler("Robbery:Client:Setup", function()
 						icon = "fas fa-fire",
 						label = "Use Thermite",
 						item = "thermite",
+						boxId = v.data.boxId,
 						onSelect = function()
 							TriggerEvent("Robbery:Client:Lombank:ElectricBox:Thermite", v.data)
 						end,
-						canInteract = function(data)
-							return not GlobalState[string.format("Lombank:Power:%s", v.data.boxId)]
+						canInteract = function(entity, data)
+							return not GlobalState[string.format("Lombank:Power:%s", data.boxId)]
 								or GetCloudTimeAsInt()
-								> GlobalState[string.format("Lombank:Power:%s", v.data.boxId)]
+								> GlobalState[string.format("Lombank:Power:%s", data.boxId)]
 						end,
 					},
 				}
@@ -151,12 +152,13 @@ AddEventHandler("Robbery:Client:Setup", function()
 						icon = "fas fa-terminal",
 						label = "Hack Power Interface",
 						item = "adv_electronics_kit",
+						boxId = v.data.boxId,
 						onSelect = function()
 							TriggerEvent("Robbery:Client:Lombank:ElectricBox:Hack", v.data)
 						end,
-						canInteract = function(data)
-							return not GlobalState[string.format("Lombank:Power:%s", v.data.boxId)]
-								or GetCloudTimeAsInt() > GlobalState[string.format("Lombank:Power:%s", v.data.boxId)]
+						canInteract = function(entity, data)
+							return not GlobalState[string.format("Lombank:Power:%s", data.boxId)]
+								or GetCloudTimeAsInt() > GlobalState[string.format("Lombank:Power:%s", data.boxId)]
 						end,
 					},
 				}
@@ -177,12 +179,13 @@ AddEventHandler("Robbery:Client:Setup", function()
 					icon = "fas fa-drill",
 					label = "Use Drill",
 					item = "drill",
-					onSelect = function()
-						TriggerEvent("Robbery:Client:Lombank:Drill", v.wallId)
+					wallId = v.wallId,
+					onSelect = function(data)
+						TriggerEvent("Robbery:Client:Lombank:Drill", data.wallId)
 					end,
-					canInteract = function(data)
-						return not GlobalState[string.format("Lombank:Upper:Wall:%s", data.id)]
-							or GetCloudTimeAsInt() > GlobalState[string.format("Lombank:Upper:Wall:%s", data.id)]
+					canInteract = function(entity, data)
+						return not GlobalState[string.format("Lombank:Upper:Wall:%s", data.wallId)]
+							or GetCloudTimeAsInt() > GlobalState[string.format("Lombank:Upper:Wall:%s", data.wallId)]
 					end,
 				},
 			}

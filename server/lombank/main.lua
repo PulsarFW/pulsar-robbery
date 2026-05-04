@@ -303,8 +303,11 @@ AddEventHandler("Robbery:Server:Setup", function()
 				) and not GlobalState["Lombank:Secured"]
 			then
 				if
-					GetGameTimer() < LOMBANK_SERVER_START_WAIT
-					or (GlobalState["RestartLockdown"] and not GlobalState["LombankInProgress"])
+					GlobalState["RestartLockdown"] ~= false
+					and (
+						GetGameTimer() < LOMBANK_SERVER_START_WAIT
+						or (GlobalState["RestartLockdown"] and not GlobalState["LombankInProgress"])
+					)
 				then
 					exports['pulsar-hud']:Notification(source, "error",
 						"Network Offline For A Storm, Check Back Later",
@@ -371,7 +374,7 @@ AddEventHandler("Robbery:Server:Setup", function()
 								if success then
 									newValue = slot.CreateDate - (60 * 60 * 12)
 								end
-								if os.time() - itemData.durability >= newValue then
+								if type(itemData.durability) == 'number' and os.time() - itemData.durability >= newValue then
 									exports.ox_inventory:RemoveId(slot.Owner, slot.invType, slot)
 								else
 									exports.ox_inventory:SetItemCreateDate(slot.id, newValue)
@@ -490,8 +493,11 @@ AddEventHandler("Robbery:Server:Setup", function()
 				) and not GlobalState["Lombank:Secured"]
 			then
 				if
-					GetGameTimer() < LOMBANK_SERVER_START_WAIT
-					or (GlobalState["RestartLockdown"] and not GlobalState["LombankInProgress"])
+					GlobalState["RestartLockdown"] ~= false
+					and (
+						GetGameTimer() < LOMBANK_SERVER_START_WAIT
+						or (GlobalState["RestartLockdown"] and not GlobalState["LombankInProgress"])
+					)
 				then
 					exports['pulsar-hud']:Notification(source, "error",
 						"You Notice The Door Is Barricaded For A Storm, Maybe Check Back Later",
@@ -688,8 +694,11 @@ AddEventHandler("Robbery:Server:Setup", function()
 				) and not GlobalState["Lombank:Secured"]
 			then
 				if
-					GetGameTimer() < LOMBANK_SERVER_START_WAIT
-					or (GlobalState["RestartLockdown"] and not GlobalState["LombankInProgress"])
+					GlobalState["RestartLockdown"] ~= false
+					and (
+						GetGameTimer() < LOMBANK_SERVER_START_WAIT
+						or (GlobalState["RestartLockdown"] and not GlobalState["LombankInProgress"])
+					)
 				then
 					exports['pulsar-hud']:Notification(source, "error",
 						"You Notice The Door Is Barricaded For A Storm, Maybe Check Back Later",
@@ -748,7 +757,7 @@ AddEventHandler("Robbery:Server:Setup", function()
 								if success then
 									newValue = slot.CreateDate - (60 * 60 * 12)
 								end
-								if os.time() - itemData.durability >= newValue then
+								if type(itemData.durability) == 'number' and os.time() - itemData.durability >= newValue then
 									exports.ox_inventory:RemoveId(slot.Owner, slot.invType, slot)
 								else
 									exports.ox_inventory:SetItemCreateDate(slot.id, newValue)

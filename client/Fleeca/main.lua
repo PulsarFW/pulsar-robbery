@@ -34,21 +34,22 @@ AddEventHandler("Robbery:Client:Setup", function()
 						icon = "fas fa-lock",
 						label = "Secure Bank",
 						groups = { "police" },
-						onSelect = function()
-							TriggerEvent("Robbery:Client:Fleeca:StartSecuring", bankData.id)
+						bankId = bankData.id,
+						onSelect = function(data)
+							TriggerEvent("Robbery:Client:Fleeca:StartSecuring", data.bankId)
 						end,
-						canInteract = function()
+						canInteract = function(entity, data)
 							return (
 								(
 									GlobalState[string.format("Fleeca:%s:VaultDoor", LocalPlayer.state.fleeca)]
 									~= nil
-									and GlobalState[string.format("Fleeca:%s:VaultDoor", bankData.id)].state == 2
+									and GlobalState[string.format("Fleeca:%s:VaultDoor", data.bankId)].state == 2
 									or GlobalState[string.format(
 										"Fleeca:%s:VaultDoor",
 										LocalPlayer.state.fleeca
 									)]
 									~= nil
-									and GlobalState[string.format("Fleeca:%s:VaultDoor", bankData.id)].state == 3
+									and GlobalState[string.format("Fleeca:%s:VaultDoor", data.bankId)].state == 3
 								)
 								or (not exports['ox_doorlock']:IsLocked(string.format("%s_gate", LocalPlayer.state.fleeca)))
 							)
@@ -196,22 +197,25 @@ function SetupFleecaVaults(bankData)
 					icon = "fas fa-drill",
 					label = "Use Drill",
 					item = "drill",
-					onSelect = function()
-						TriggerEvent("Robbery:Client:Fleeca:Drill", bankData.id, k, v.options.name)
+					bankId = bankData.id,
+					lootName = v.options.name,
+					lootIndex = k,
+					onSelect = function(data)
+						TriggerEvent("Robbery:Client:Fleeca:Drill", data.bankId, { id = data.lootName, index = data.lootIndex })
 					end,
-					canInteract = function()
+					canInteract = function(entity, data)
 						return GlobalState[string.format("Fleeca:%s:VaultDoor", LocalPlayer.state.fleeca)] ~= nil
 							and GlobalState[string.format("Fleeca:%s:VaultDoor", LocalPlayer.state.fleeca)].state == 3
 							and (GlobalState[string.format(
 								"Fleeca:%s:Loot:%s",
 								LocalPlayer.state.fleeca,
-								v.options.name
+								data.lootName
 							)] == nil or GetCloudTimeAsInt() >= GlobalState[string.format(
 								"Fleeca:%s:Loot:%s",
 								LocalPlayer.state.fleeca,
-								v.options.name
+								data.lootName
 							)])
-							and (k <= 2 or not exports['ox_doorlock']:IsLocked(string.format("%s_gate", LocalPlayer.state.fleeca)))
+							and (data.lootIndex <= 2 or not exports['ox_doorlock']:IsLocked(string.format("%s_gate", LocalPlayer.state.fleeca)))
 					end,
 				},
 			}

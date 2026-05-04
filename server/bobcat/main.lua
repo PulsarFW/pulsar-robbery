@@ -95,7 +95,7 @@ AddEventHandler("Robbery:Server:Setup", function()
 			and not GlobalState["Bobcat:ExtrDoor"]
 			and #(_bobcatLocations.extrDoor.coords - myPos) <= 3.5
 		then
-			if GetGameTimer() < BC_SERVER_START_WAIT or (GlobalState["RestartLockdown"] and not GlobalState["BobcatInProgress"]) then
+			if GlobalState["RestartLockdown"] ~= false and (GetGameTimer() < BC_SERVER_START_WAIT or (GlobalState["RestartLockdown"] and not GlobalState["BobcatInProgress"])) then
 				exports['pulsar-hud']:Notification(source, "error",
 					"You Notice The Door Is Barricaded For A Storm, Maybe Check Back Later",
 					6000
@@ -199,7 +199,7 @@ AddEventHandler("Robbery:Server:Setup", function()
 					and #(_bobcatLocations.startDoor.coords - myPos) <= 3.5
 				then
 					if
-						GetGameTimer() < BC_SERVER_START_WAIT or (GlobalState["RestartLockdown"] and not GlobalState["BobcatInProgress"])
+						GlobalState["RestartLockdown"] ~= false and (GetGameTimer() < BC_SERVER_START_WAIT or (GlobalState["RestartLockdown"] and not GlobalState["BobcatInProgress"]))
 					then
 						exports['pulsar-hud']:Notification(source, "error",
 							"You Notice The Door Is Barricaded For A Storm, Maybe Check Back Later",
@@ -308,7 +308,7 @@ AddEventHandler("Robbery:Server:Setup", function()
 							local entState = Entity(ent).state
 
 							if
-								GetGameTimer() < BCT_SERVER_START_WAIT or (GlobalState["RestartLockdown"] and not entState.robberyInProgress)
+								GlobalState["RestartLockdown"] ~= false and (GetGameTimer() < BCT_SERVER_START_WAIT or (GlobalState["RestartLockdown"] and not entState.robberyInProgress))
 							then
 								exports['pulsar-hud']:Notification(source, "error",
 									"You Notice The Door Is Barricaded For A Storm, Maybe Check Back Later",
@@ -500,7 +500,7 @@ AddEventHandler("Robbery:Server:Setup", function()
 			then
 				local myPos = GetEntityCoords(GetPlayerPed(source))
 				if #(_bobcatLocations.vaultDoor.coords - myPos) <= 3.5 then
-					if GetGameTimer() < BC_SERVER_START_WAIT or (GlobalState["RestartLockdown"] and not GlobalState["BobcatInProgress"]) then
+					if GlobalState["RestartLockdown"] ~= false and (GetGameTimer() < BC_SERVER_START_WAIT or (GlobalState["RestartLockdown"] and not GlobalState["BobcatInProgress"])) then
 						exports['pulsar-hud']:Notification(source, "error",
 							"You Notice The Door Is Barricaded For A Storm, Maybe Check Back Later",
 							6000
@@ -597,7 +597,7 @@ AddEventHandler("Robbery:Server:Setup", function()
 				and not GlobalState["Bobcat:Secured"]
 			then
 				if #(_bobcatLocations.securedDoor.coords - myCoords) <= 1.5 then
-					if GetGameTimer() < BC_SERVER_START_WAIT or (GlobalState["RestartLockdown"] and not GlobalState["BobcatInProgress"]) then
+					if GlobalState["RestartLockdown"] ~= false and (GetGameTimer() < BC_SERVER_START_WAIT or (GlobalState["RestartLockdown"] and not GlobalState["BobcatInProgress"])) then
 						exports['pulsar-hud']:Notification(source, "error",
 							"You Notice The Door Is Barricaded For A Storm, Maybe Check Back Later",
 							6000
@@ -666,14 +666,16 @@ AddEventHandler("Robbery:Server:Setup", function()
 								exports['ox_doorlock']:SetLock("bobcat_inner", true)
 								exports['pulsar-status']:Add(source, "PLAYER_STRESS", 6)
 
-								local newValue = slot.CreateDate - math.ceil(itemData.durability / 4)
-								if (os.time() - itemData.durability >= newValue) then
-									exports.ox_inventory:RemoveId(char:GetData("SID"), 1, slot)
-								else
-									exports.ox_inventory:SetItemCreateDate(
-										slot.id,
-										newValue
-									)
+								if type(itemData.durability) == 'number' then
+									local newValue = slot.CreateDate - math.ceil(itemData.durability / 4)
+									if (os.time() - itemData.durability >= newValue) then
+										exports.ox_inventory:RemoveId(char:GetData("SID"), 1, slot)
+									else
+										exports.ox_inventory:SetItemCreateDate(
+											slot.id,
+											newValue
+										)
+									end
 								end
 							end
 							_bcInUse.securedDoor = false
@@ -848,7 +850,7 @@ AddEventHandler("Robbery:Server:Setup", function()
 					and GlobalState["Bobcat:SecuredDoor"]
 					and not GlobalState["Bobcat:Secured"]
 				then
-					if GetGameTimer() < BC_SERVER_START_WAIT or (GlobalState["RestartLockdown"] and not GlobalState["BobcatInProgress"]) then
+					if GlobalState["RestartLockdown"] ~= false and (GetGameTimer() < BC_SERVER_START_WAIT or (GlobalState["RestartLockdown"] and not GlobalState["BobcatInProgress"])) then
 						exports['pulsar-hud']:Notification(source, "error",
 							"You Notice The Door Is Barricaded For A Storm, Maybe Check Back Later",
 							6000

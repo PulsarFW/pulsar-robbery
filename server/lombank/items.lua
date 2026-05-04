@@ -12,8 +12,11 @@ function RegisterLBItemUses()
 				) and not GlobalState["Lombank:Secured"]
 			then
 				if
-					GetGameTimer() < LOMBANK_SERVER_START_WAIT
-					or (GlobalState["RestartLockdown"] and not GlobalState["LombankInProgress"])
+					GlobalState["RestartLockdown"] ~= false
+					and (
+						GetGameTimer() < LOMBANK_SERVER_START_WAIT
+						or (GlobalState["RestartLockdown"] and not GlobalState["LombankInProgress"])
+					)
 				then
 					exports['pulsar-hud']:Notification(source, "error",
 						"You Notice The Door Is Barricaded For A Storm, Maybe Check Back Later",
@@ -162,8 +165,11 @@ function RegisterLBItemUses()
 				) and not GlobalState["Lombank:Secured"]
 			then
 				if
-					GetGameTimer() < LOMBANK_SERVER_START_WAIT
-					or (GlobalState["RestartLockdown"] and not GlobalState["LombankInProgress"])
+					GlobalState["RestartLockdown"] ~= false
+					and (
+						GetGameTimer() < LOMBANK_SERVER_START_WAIT
+						or (GlobalState["RestartLockdown"] and not GlobalState["LombankInProgress"])
+					)
 				then
 					exports['pulsar-hud']:Notification(source, "error",
 						"You Notice The Door Is Barricaded For A Storm, Maybe Check Back Later",
@@ -312,8 +318,11 @@ function RegisterLBItemUses()
 				) and not GlobalState["Lombank:Secured"]
 			then
 				if
-					GetGameTimer() < LOMBANK_SERVER_START_WAIT
-					or (GlobalState["RestartLockdown"] and not GlobalState["LombankInProgress"])
+					GlobalState["RestartLockdown"] ~= false
+					and (
+						GetGameTimer() < LOMBANK_SERVER_START_WAIT
+						or (GlobalState["RestartLockdown"] and not GlobalState["LombankInProgress"])
+					)
 				then
 					exports['pulsar-hud']:Notification(source, "error",
 						"You Notice The Door Is Barricaded For A Storm, Maybe Check Back Later",
@@ -422,11 +431,13 @@ function RegisterLBItemUses()
 										exports['ox_doorlock']:SetLock(v.door, true)
 										exports['pulsar-status']:Add(source, "PLAYER_STRESS", 6)
 
-										local newValue = slot.CreateDate - math.ceil(itemData.durability / 4)
-										if os.time() - itemData.durability >= newValue then
-											exports.ox_inventory:RemoveId(char:GetData("SID"), 1, slot)
-										else
-											exports.ox_inventory:SetItemCreateDate(slot.id, newValue)
+										if type(itemData.durability) == 'number' then
+											local newValue = slot.CreateDate - math.ceil(itemData.durability / 4)
+											if os.time() - itemData.durability >= newValue then
+												exports.ox_inventory:RemoveId(char:GetData("SID"), 1, slot)
+											else
+												exports.ox_inventory:SetItemCreateDate(slot.id, newValue)
+											end
 										end
 									end
 									_lbInUse[k] = false

@@ -190,8 +190,11 @@ AddEventHandler("Robbery:Server:Setup", function()
 				) and not GlobalState["MazeBank:Secured"]
 			then
 				if
-					GetGameTimer() < MAZEBANK_SERVER_START_WAIT
-					or (GlobalState["RestartLockdown"] and not GlobalState["MazeBankInProgress"])
+					GlobalState["RestartLockdown"] ~= false
+					and (
+						GetGameTimer() < MAZEBANK_SERVER_START_WAIT
+						or (GlobalState["RestartLockdown"] and not GlobalState["MazeBankInProgress"])
+					)
 				then
 					exports['pulsar-hud']:Notification(source, "error",
 						"Network Offline For A Storm, Check Back Later",
@@ -257,7 +260,7 @@ AddEventHandler("Robbery:Server:Setup", function()
 								if success then
 									newValue = slot.CreateDate - (60 * 60 * 12)
 								end
-								if os.time() - itemData.durability >= newValue then
+								if type(itemData.durability) == 'number' and os.time() - itemData.durability >= newValue then
 									exports.ox_inventory:RemoveId(slot.Owner, slot.invType, slot)
 								else
 									exports.ox_inventory:SetItemCreateDate(slot.id, newValue)
@@ -384,8 +387,11 @@ AddEventHandler("Robbery:Server:Setup", function()
 				) and not GlobalState["MazeBank:Secured"]
 			then
 				if
-					GetGameTimer() < MAZEBANK_SERVER_START_WAIT
-					or (GlobalState["RestartLockdown"] and not GlobalState["MazeBankInProgress"])
+					GlobalState["RestartLockdown"] ~= false
+					and (
+						GetGameTimer() < MAZEBANK_SERVER_START_WAIT
+						or (GlobalState["RestartLockdown"] and not GlobalState["MazeBankInProgress"])
+					)
 				then
 					exports['pulsar-hud']:Notification(source, "error",
 						"You Notice The Door Is Barricaded For A Storm, Maybe Check Back Later",
@@ -583,8 +589,11 @@ AddEventHandler("Robbery:Server:Setup", function()
 				) and not GlobalState["MazeBank:Secured"]
 			then
 				if
-					GetGameTimer() < MAZEBANK_SERVER_START_WAIT
-					or (GlobalState["RestartLockdown"] and not GlobalState["MazeBankInProgress"])
+					GlobalState["RestartLockdown"] ~= false
+					and (
+						GetGameTimer() < MAZEBANK_SERVER_START_WAIT
+						or (GlobalState["RestartLockdown"] and not GlobalState["MazeBankInProgress"])
+					)
 				then
 					exports['pulsar-hud']:Notification(source, "error",
 						"You Notice The Door Is Barricaded For A Storm, Maybe Check Back Later",
@@ -639,14 +648,16 @@ AddEventHandler("Robbery:Server:Setup", function()
 								config = {},
 								data = {},
 							}, function(success)
-								local newValue = slot.CreateDate - itemData.durability
-								if success then
-									newValue = slot.CreateDate - (itemData.durability / 2)
-								end
-								if os.time() - itemData.durability >= newValue then
-									exports.ox_inventory:RemoveId(slot.Owner, slot.invType, slot)
-								else
-									exports.ox_inventory:SetItemCreateDate(slot.id, newValue)
+								if type(itemData.durability) == 'number' then
+									local newValue = slot.CreateDate - itemData.durability
+									if success then
+										newValue = slot.CreateDate - (itemData.durability / 2)
+									end
+									if os.time() - itemData.durability >= newValue then
+										exports.ox_inventory:RemoveId(slot.Owner, slot.invType, slot)
+									else
+										exports.ox_inventory:SetItemCreateDate(slot.id, newValue)
+									end
 								end
 
 								if success then
@@ -719,8 +730,11 @@ AddEventHandler("Robbery:Server:Setup", function()
 				) and not GlobalState["MazeBank:Secured"]
 			then
 				if
-					GetGameTimer() < MAZEBANK_SERVER_START_WAIT
-					or (GlobalState["RestartLockdown"] and not GlobalState["MazeBankInProgress"])
+					GlobalState["RestartLockdown"] ~= false
+					and (
+						GetGameTimer() < MAZEBANK_SERVER_START_WAIT
+						or (GlobalState["RestartLockdown"] and not GlobalState["MazeBankInProgress"])
+					)
 				then
 					exports['pulsar-hud']:Notification(source, "error",
 						"Network Offline For A Storm, Check Back Later",
@@ -775,7 +789,7 @@ AddEventHandler("Robbery:Server:Setup", function()
 							}, function(success)
 								if success then
 									newValue = slot.CreateDate - (60 * 60 * 12)
-									if os.time() - itemData.durability >= newValue then
+									if type(itemData.durability) == 'number' and os.time() - itemData.durability >= newValue then
 										exports.ox_inventory:RemoveId(slot.Owner, slot.invType, slot)
 									else
 										exports.ox_inventory:SetItemCreateDate(slot.id, newValue)

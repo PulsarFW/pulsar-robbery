@@ -145,7 +145,7 @@ AddEventHandler("Robbery:Server:Setup", function()
 					or not exports['ox_doorlock']:IsLocked(string.format("%s_gate", pState.fleeca))
 				)
 			then
-				if GetGameTimer() < SERVER_START_WAIT or (GlobalState["RestartLockdown"] and not _inProgress[pState.fleeca]) then
+				if GlobalState["RestartLockdown"] ~= false and (GetGameTimer() < SERVER_START_WAIT or (GlobalState["RestartLockdown"] and not _inProgress[pState.fleeca])) then
 					exports['pulsar-hud']:Notification(source, "error",
 						"You Notice The Door Is Barricaded For A Storm, Maybe Check Back Later",
 						6000
@@ -193,14 +193,16 @@ AddEventHandler("Robbery:Server:Setup", function()
 								config = {},
 								data = {},
 							}, function(success)
-								local newValue = slot.CreateDate - itemData.durability
-								if success then
-									newValue = slot.CreateDate - (itemData.durability / 5)
-								end
-								if os.time() - itemData.durability >= newValue then
-									exports.ox_inventory:RemoveId(slot.Owner, slot.invType, slot)
-								else
-									exports.ox_inventory:SetItemCreateDate(slot.id, newValue)
+								if type(itemData.durability) == 'number' then
+									local newValue = slot.CreateDate - itemData.durability
+									if success then
+										newValue = slot.CreateDate - (itemData.durability / 5)
+									end
+									if os.time() - itemData.durability >= newValue then
+										exports.ox_inventory:RemoveId(slot.Owner, slot.invType, slot)
+									else
+										exports.ox_inventory:SetItemCreateDate(slot.id, newValue)
+									end
 								end
 
 								if _robberyAlerts[pState.fleeca] == nil or _robberyAlerts[pState.fleeca] < os.time() then
@@ -342,7 +344,7 @@ AddEventHandler("Robbery:Server:Setup", function()
 			if not GlobalState["AntiShitlord"] or os.time() >= GlobalState["AntiShitlord"] or _inProgress[pState.fleeca] then
 				local bankData = GlobalState[string.format("FleecaRobberies:%s", pState.fleeca)]
 				if #(bankData.points.vaultPC.coords - playerCoords) <= 1.5 then
-					if GetGameTimer() < SERVER_START_WAIT or (GlobalState["RestartLockdown"] and not _inProgress[pState.fleeca]) then
+					if GlobalState["RestartLockdown"] ~= false and (GetGameTimer() < SERVER_START_WAIT or (GlobalState["RestartLockdown"] and not _inProgress[pState.fleeca])) then
 						exports['pulsar-hud']:Notification(source, "error",
 							"You Notice The Door Is Barricaded For A Storm, Maybe Check Back Later",
 							6000
@@ -445,14 +447,13 @@ AddEventHandler("Robbery:Server:Setup", function()
 											string.format("%s %s (%s) Failed Hacking Vault Door At %s",
 												char:GetData("First"), char:GetData("Last"), char:GetData("SID"),
 												pState.fleeca))
-										local newValue = slot.CreateDate - math.ceil(itemData.durability / 2)
-										if (os.time() - itemData.durability >= newValue) then
-											exports.ox_inventory:RemoveId(slot.Owner, slot.invType, slot)
-										else
-											exports.ox_inventory:SetItemCreateDate(
-												slot.id,
-												newValue
-											)
+										if type(itemData.durability) == 'number' then
+											local newValue = slot.CreateDate - math.ceil(itemData.durability / 2)
+											if (os.time() - itemData.durability >= newValue) then
+												exports.ox_inventory:RemoveId(slot.Owner, slot.invType, slot)
+											else
+												exports.ox_inventory:SetItemCreateDate(slot.id, newValue)
+											end
 										end
 									end
 									_inUse.VaultDoor[pState.fleeca] = false
@@ -502,7 +503,7 @@ AddEventHandler("Robbery:Server:Setup", function()
 			if not GlobalState["AntiShitlord"] or os.time() >= GlobalState["AntiShitlord"] or _inProgress[pState.fleeca] then
 				local bankData = GlobalState[string.format("FleecaRobberies:%s", pState.fleeca)]
 				if #(bankData.points.vaultGate.coords - playerCoords) <= 1.5 then
-					if GetGameTimer() < SERVER_START_WAIT or (GlobalState["RestartLockdown"] and not _inProgress[pState.fleeca]) then
+					if GlobalState["RestartLockdown"] ~= false and (GetGameTimer() < SERVER_START_WAIT or (GlobalState["RestartLockdown"] and not _inProgress[pState.fleeca])) then
 						exports['pulsar-hud']:Notification(source, "error",
 							"You Notice The Door Is Barricaded For A Storm, Maybe Check Back Later",
 							6000
@@ -635,7 +636,7 @@ AddEventHandler("Robbery:Server:Setup", function()
 						#(GlobalState[string.format("FleecaRobberies:%s", pState.fleeca)].points.vaultPC.coords - playerCoords)
 						<= 1.5
 					then
-						if GetGameTimer() < SERVER_START_WAIT or (GlobalState["RestartLockdown"] and not _inProgress[pState.fleeca]) then
+						if GlobalState["RestartLockdown"] ~= false and (GetGameTimer() < SERVER_START_WAIT or (GlobalState["RestartLockdown"] and not _inProgress[pState.fleeca])) then
 							exports['pulsar-hud']:Notification(source, "error",
 								"You Notice The Door Is Barricaded For A Storm, Maybe Check Back Later",
 								6000

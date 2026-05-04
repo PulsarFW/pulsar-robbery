@@ -615,14 +615,16 @@ AddEventHandler("Robbery:Server:Setup", function()
 				local slot = exports.ox_inventory:ItemsGetFirst(char:GetData("SID"), "lockpick", 1)
 				if slot ~= nil then
 					local itemData = exports.ox_inventory:ItemsGetData("lockpick")
-					local newValue = slot.CreateDate - math.ceil(itemData.durability / 2)
-					if success then
-						newValue = slot.CreateDate - math.ceil(itemData.durability / 8)
-					end
-					if os.time() - itemData.durability >= newValue then
-						exports.ox_inventory:RemoveId(slot.Owner, slot.invType, slot)
-					else
-						exports.ox_inventory:SetItemCreateDate(slot.id, newValue)
+					if type(itemData.durability) == 'number' then
+						local newValue = slot.CreateDate - math.ceil(itemData.durability / 2)
+						if success then
+							newValue = slot.CreateDate - math.ceil(itemData.durability / 8)
+						end
+						if os.time() - itemData.durability >= newValue then
+							exports.ox_inventory:RemoveId(slot.Owner, slot.invType, slot)
+						else
+							exports.ox_inventory:SetItemCreateDate(slot.id, newValue)
+						end
 					end
 				end
 
@@ -656,7 +658,7 @@ AddEventHandler("Robbery:Server:Setup", function()
 					GlobalState[string.format("Safe:%s", data.id)] == nil
 					or os.time() > GlobalState[string.format("Safe:%s", data.id)].expires
 				then
-					if GetGameTimer() < STORE_SERVER_START_WAIT then
+					if GlobalState["RestartLockdown"] ~= false and GetGameTimer() < STORE_SERVER_START_WAIT then
 						exports['pulsar-hud']:Notification(source, "error",
 							"You Notice The Register Has An Extra Lock On It Securing It For A Storm, Maybe Check Back Later",
 							6000
@@ -710,11 +712,13 @@ AddEventHandler("Robbery:Server:Setup", function()
 							}, function(isSuccess, extra)
 								local itemData = exports.ox_inventory:ItemsGetData("safecrack_kit")
 
-								local newValue = slot.CreateDate - math.ceil(itemData.durability / 2)
-								if os.time() - itemData.durability >= newValue then
-									exports.ox_inventory:RemoveId(char:GetData("SID"), 1, slot)
-								else
-									exports.ox_inventory:SetItemCreateDate(slot.id, newValue)
+								if type(itemData.durability) == 'number' then
+									local newValue = slot.CreateDate - math.ceil(itemData.durability / 2)
+									if os.time() - itemData.durability >= newValue then
+										exports.ox_inventory:RemoveId(char:GetData("SID"), 1, slot)
+									else
+										exports.ox_inventory:SetItemCreateDate(slot.id, newValue)
+									end
 								end
 
 								if isSuccess then
@@ -792,7 +796,7 @@ AddEventHandler("Robbery:Server:Setup", function()
 	end)
 
 	exports["pulsar-core"]:RegisterServerCallback("Robbery:Store:StartSafeSequence", function(source, data, cb)
-		if GetGameTimer() < STORE_SERVER_START_WAIT then
+		if GlobalState["RestartLockdown"] ~= false and GetGameTimer() < STORE_SERVER_START_WAIT then
 			exports['pulsar-hud']:Notification(source, "error",
 				"You Notice The Register Has An Extra Lock On It Securing It For A Storm, Maybe Check Back Later",
 				6000
@@ -820,7 +824,7 @@ AddEventHandler("Robbery:Server:Setup", function()
 				GlobalState[string.format("Register:%s:%s", data.x, data.y)] == nil
 				and not GlobalState["RestartLockdown"]
 			then
-				if GetGameTimer() < STORE_SERVER_START_WAIT then
+				if GlobalState["RestartLockdown"] ~= false and GetGameTimer() < STORE_SERVER_START_WAIT then
 					exports['pulsar-hud']:Notification(source, "error",
 						"You Notice The Register Has An Extra Lock On It Securing It For A Storm, Maybe Check Back Later",
 						6000
@@ -869,7 +873,7 @@ AddEventHandler("Robbery:Server:Setup", function()
 	exports["pulsar-core"]:RegisterServerCallback("Robbery:Store:Safe", function(source, data, cb)
 		local char = exports['pulsar-characters']:FetchCharacterSource(source)
 		if GlobalState[string.format("Safe:%s", data.id)] == nil and not GlobalState["RestartLockdown"] then
-			if GetGameTimer() < STORE_SERVER_START_WAIT then
+			if GlobalState["RestartLockdown"] ~= false and GetGameTimer() < STORE_SERVER_START_WAIT then
 				exports['pulsar-hud']:Notification(source, "error",
 					"You Notice The Register Has An Extra Lock On It Securing It For A Storm, Maybe Check Back Later",
 					6000

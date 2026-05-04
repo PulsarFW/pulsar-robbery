@@ -12,8 +12,11 @@ function RegisterMBItemUses()
 				) and not GlobalState["MazeBank:Secured"]
 			then
 				if
-					GetGameTimer() < MAZEBANK_SERVER_START_WAIT
-					or (GlobalState["RestartLockdown"] and not GlobalState["MazeBankInProgress"])
+					GlobalState["RestartLockdown"] ~= false
+					and (
+						GetGameTimer() < MAZEBANK_SERVER_START_WAIT
+						or (GlobalState["RestartLockdown"] and not GlobalState["MazeBankInProgress"])
+					)
 				then
 					exports['pulsar-hud']:Notification(source, "error",
 						"You Notice The Door Is Barricaded For A Storm, Maybe Check Back Later",
@@ -168,8 +171,11 @@ function RegisterMBItemUses()
 				) and not GlobalState["MazeBank:Secured"]
 			then
 				if
-					GetGameTimer() < MAZEBANK_SERVER_START_WAIT
-					or (GlobalState["RestartLockdown"] and not GlobalState["MazeBankInProgress"])
+					GlobalState["RestartLockdown"] ~= false
+					and (
+						GetGameTimer() < MAZEBANK_SERVER_START_WAIT
+						or (GlobalState["RestartLockdown"] and not GlobalState["MazeBankInProgress"])
+					)
 				then
 					exports['pulsar-hud']:Notification(source, "error",
 						"You Notice The Door Is Barricaded For A Storm, Maybe Check Back Later",
@@ -263,7 +269,7 @@ function RegisterMBItemUses()
 											)
 
 											local newValue = slot.CreateDate - (60 * 60 * 24)
-											if os.time() - itemData.durability >= newValue then
+											if type(itemData.durability) == 'number' and os.time() - itemData.durability >= newValue then
 												exports.ox_inventory:RemoveId(slot.Owner, slot.invType, slot)
 											else
 												exports.ox_inventory:SetItemCreateDate(slot.id, newValue)
@@ -311,8 +317,11 @@ function RegisterMBItemUses()
 				) and not GlobalState["MazeBank:Secured"]
 			then
 				if
-					GetGameTimer() < MAZEBANK_SERVER_START_WAIT
-					or (GlobalState["RestartLockdown"] and not GlobalState["MazeBankInProgress"])
+					GlobalState["RestartLockdown"] ~= false
+					and (
+						GetGameTimer() < MAZEBANK_SERVER_START_WAIT
+						or (GlobalState["RestartLockdown"] and not GlobalState["MazeBankInProgress"])
+					)
 				then
 					exports['pulsar-hud']:Notification(source, "error",
 						"You Notice The Door Is Barricaded For A Storm, Maybe Check Back Later",
@@ -361,7 +370,7 @@ function RegisterMBItemUses()
 									if success then
 										newValue = slot.CreateDate - (60 * 60 * 12)
 									end
-									if os.time() - itemData.durability >= newValue then
+									if type(itemData.durability) == 'number' and os.time() - itemData.durability >= newValue then
 										exports.ox_inventory:RemoveId(slot.Owner, slot.invType, slot)
 									else
 										exports.ox_inventory:SetItemCreateDate(slot.id, newValue)
@@ -399,11 +408,13 @@ function RegisterMBItemUses()
 										exports['ox_doorlock']:SetLock(v.door, true)
 										exports['pulsar-status']:Add(source, "PLAYER_STRESS", 6)
 
-										local newValue = slot.CreateDate - math.ceil(itemData.durability / 4)
-										if os.time() - itemData.durability >= newValue then
-											exports.ox_inventory:RemoveId(char:GetData("SID"), 1, slot)
-										else
-											exports.ox_inventory:SetItemCreateDate(slot.id, newValue)
+										if type(itemData.durability) == 'number' then
+											local newValue = slot.CreateDate - math.ceil(itemData.durability / 4)
+											if os.time() - itemData.durability >= newValue then
+												exports.ox_inventory:RemoveId(char:GetData("SID"), 1, slot)
+											else
+												exports.ox_inventory:SetItemCreateDate(slot.id, newValue)
+											end
 										end
 									end
 									_mbInUse[v.door] = false
