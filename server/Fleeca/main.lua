@@ -257,7 +257,7 @@ AddEventHandler("Robbery:Server:Setup", function()
 									StartAutoCDTimer(pState.fleeca)
 									GlobalState[string.format("Fleeca:Disable:%s", pState.fleeca)] = true
 									exports['pulsar-hud']:Notification(source, "success", "Vault Looted", 5000)
-									TriggerClientEvent("Robbery:Client:Fleeca:LootSuccess", source)
+									TriggerClientEvent("Robbery:Client:Fleeca:LootSuccess", source, pState.fleeca, data.index, lootData.trolley)
 								end
 
 								_inUse.Loot[data.id] = false

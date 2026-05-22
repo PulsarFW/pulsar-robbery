@@ -1,5 +1,6 @@
 local _inPoly = nil
 local _polys = {}
+local _trolleyProps = {}
 
 AddEventHandler("Characters:Client:Spawn", function()
 	FleecaThreads()
@@ -150,9 +151,54 @@ AddEventHandler("Robbery:Client:Fleeca:Drill", function(entity, data)
 end)
 
 RegisterNetEvent("Robbery:Client:Fleeca:LootSuccess")
-AddEventHandler("Robbery:Client:Fleeca:LootSuccess", function()
-	loadAnimDict("pickup_object")
-	TaskPlayAnim(LocalPlayer.state.ped, "pickup_object", "pickup_low", 8.0, 1.0, 2000, 48, 0, false, false, false)
+AddEventHandler("Robbery:Client:Fleeca:LootSuccess", function(fleecaId, index, trolley)
+	local playerPed = LocalPlayer.state.ped
+	local propKey   = string.format("%s_%s", fleecaId, index)
+	local fullProp  = _trolleyProps[propKey]
+
+	-- swap full trolley → empty
+	local emptyCoords = nil
+	if fullProp and DoesEntityExist(fullProp) then
+		emptyCoords = GetEntityCoords(fullProp)
+		DeleteEntity(fullProp)
+		_trolleyProps[propKey] = nil
+	end
+
+	if trolley and trolley.empty and emptyCoords then
+		CreateThread(function()
+			local emptyModel = trolley.empty
+			RequestModel(emptyModel)
+			while not HasModelLoaded(emptyModel) do Wait(10) end
+			local emptyProp = CreateObject(emptyModel, emptyCoords.x, emptyCoords.y, emptyCoords.z, true, true, false)
+			SetEntityAsMissionEntity(emptyProp, true, true)
+			PlaceObjectOnGroundProperly(emptyProp)
+			FreezeEntityPosition(emptyProp, true)
+			SetModelAsNoLongerNeeded(emptyModel)
+		end)
+	end
+
+	-- attach hand prop during animation
+	local handProp = nil
+	if trolley and trolley.hand then
+		local handModel = trolley.hand
+		RequestModel(handModel)
+		while not HasModelLoaded(handModel) do Wait(10) end
+		handProp = CreateObject(handModel, 0, 0, 0, true, true, false)
+		local boneIndex = GetPedBoneIndex(playerPed, 57005) -- right hand
+		AttachEntityToEntity(handProp, playerPed, boneIndex, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, true, true, false, true, 1, true)
+		SetModelAsNoLongerNeeded(handModel)
+	end
+
+	local dict = "pickup_object"
+	RequestAnimDict(dict)
+	while not HasAnimDictLoaded(dict) do Wait(10) end
+	TaskPlayAnim(playerPed, dict, "pickup_low", 8.0, 1.0, 2000, 48, 0, false, false, false)
+	Wait(2000)
+
+	if handProp and DoesEntityExist(handProp) then
+		DetachEntity(handProp, true, true)
+		DeleteEntity(handProp)
+	end
 end)
 
 function OpenDoor(checkOrigin, door)
@@ -183,8 +229,27 @@ function CloseDoor(checkOrigin, door)
 	end
 end
 
+local function SpawnTrolley(bankId, index, trolley, coords)
+	if not trolley then return end
+	local model = trolley.hash
+	RequestModel(model)
+	while not HasModelLoaded(model) do Wait(10) end
+	local prop = CreateObject(model, coords.x, coords.y, coords.z, true, true, false)
+	SetEntityAsMissionEntity(prop, true, true)
+	PlaceObjectOnGroundProperly(prop)
+	FreezeEntityPosition(prop, true)
+	SetModelAsNoLongerNeeded(model)
+	_trolleyProps[string.format("%s_%s", bankId, index)] = prop
+end
+
 function SetupFleecaVaults(bankData)
 	for k, v in ipairs(bankData.loots) do
+		if v.trolley then
+			CreateThread(function()
+				SpawnTrolley(bankData.id, k, v.trolley, v.coords)
+			end)
+		end
+
 		exports.ox_target:addBoxZone({
 			id = string.format("fleeca-%s", v.options.name),
 			coords = v.coords,
