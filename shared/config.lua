@@ -58,8 +58,11 @@ RobberyConfig = {
                     thermiteLoc = { coords = vector3(313.2626, -285.3768, 54.50795), heading = 166.280 }, -- thermiteLoc = vault gate thermite placement
                 },
                 doors = { vaultDoor = { object = 2121050683, step = -0.60, originalHeading = 249.866 } },
-                loots = { -- loots: drill targets inside the vault (registered as ox_target zones)
-                    --   options.name must be globally unique ; used as the ox_target zone ID
+                trolleys = { -- tune coords in-game
+                    { coords = vector4(315.107, -283.995, 53.143, 117.791) },
+                    { coords = vector4(314.068, -289.129, 53.143, 23.164) },
+                },
+                loots = { -- loots: drill targets inside the vault; options.name must be globally unique
                     { coords = vector3(314.22, -282.97, 54.16), width = 0.2,  length = 2.8,  options = { name = "hawick_east_1", heading = 340, minZ = 53.16, maxZ = 55.56 } },
                     { coords = vector3(315.77, -285.06, 54.16), width = 2.0,  length = 0.2,  options = { name = "hawick_east_2", heading = 339, minZ = 53.16, maxZ = 55.56 } },
                     { coords = vector3(315.22, -288.37, 54.16), width = 2.95, length = 0.2,  options = { name = "hawick_east_3", heading = 340, minZ = 53.16, maxZ = 55.56 } },
@@ -79,6 +82,10 @@ RobberyConfig = {
                     thermiteLoc = { coords = vector3(-351.7869, -56.2472, 49.36483), heading = 163.485 },
                 },
                 doors = { vaultDoor = { object = 2121050683, step = -0.60, originalHeading = 250.860 } },
+                trolleys = { -- tune coords in-game
+                    { coords = vector4(-350.154, -54.967, 48.015, 119.000) },
+                    { coords = vector4(-353.707, -59.009, 48.015, 284.729) },
+                },
                 loots = {
                     { coords = vector3(-350.84, -53.73, 49.04), width = 0.45, length = 2.95, options = { name = "hawick_west_1", heading = 340, minZ = 48.04, maxZ = 50.44 } },
                     { coords = vector3(-349.23, -55.87, 49.04), width = 2.0,  length = 0.2,  options = { name = "hawick_west_2", heading = 340, minZ = 48.04, maxZ = 50.44 } },
@@ -99,6 +106,10 @@ RobberyConfig = {
                     thermiteLoc = { coords = vector3(-1208.644, -335.7033, 38.10191), heading = 209.101 },
                 },
                 doors = { vaultDoor = { object = 2121050683, step = -0.60, originalHeading = 296.864 } },
+                trolleys = { -- tune coords in-game
+                    { coords = vector4(-1208.453, -333.519, 36.759, 159.972) },
+                    { coords = vector4(-1205.489, -337.427, 36.759, 63.528) },
+                },
                 loots = {
                     { coords = vector3(-1209.8,  -333.39, 37.78), width = 0.2,  length = 2.95, options = { name = "delperro_1", heading = 26, minZ = 36.78, maxZ = 39.18 } },
                     { coords = vector3(-1207.2,  -333.65, 37.78), width = 2.0,  length = 0.2,  options = { name = "delperro_2", heading = 27, minZ = 36.78, maxZ = 39.18 } },
@@ -119,6 +130,10 @@ RobberyConfig = {
                     thermiteLoc = { coords = vector3(-2956.255, 483.9868, 16.0309), heading = 269.528 },
                 },
                 doors = { vaultDoor = { object = 2121050683, step = -0.60, originalHeading = 357.542 } },
+                trolleys = { -- tune coords in-game
+                    { coords = vector4(-2957.048, 485.261, 14.675, 127.790) },
+                    { coords = vector4(-2955.145, 485.981, 14.675, 212.158) },
+                },
                 loots = {
                     { coords = vector3(-2958.89, 484.14, 15.7), width = 0.2,  length = 2.95, options = { name = "great_ocean_1", heading = 88, minZ = 14.7, maxZ = 17.1 } },
                     { coords = vector3(-2957.34, 486.26, 15.7), width = 2.0,  length = 0.2,  options = { name = "great_ocean_2", heading = 88, minZ = 14.7, maxZ = 17.1 } },
@@ -139,6 +154,10 @@ RobberyConfig = {
                     thermiteLoc = { coords = vector3(1173.74, 2713.073, 38.41225), heading = 3.455 },
                 },
                 doors = { vaultDoor = { object = 2121050683, step = -0.60, originalHeading = 90.0 } },
+                trolleys = { -- tune coords in-game
+                    { coords = vector4(1172.281, 2712.093, 37.066, 223.210) },
+                    { coords = vector4(1174.411, 2716.172, 37.066, 152.084) },
+                },
                 loots = {
                     { coords = vector3(1173.72, 2710.48, 38.09), width = 0.2,  length = 2.95, options = { name = "route68_1", heading = 0,   minZ = 37.09, maxZ = 39.49 } },
                     { coords = vector3(1171.51, 2711.88, 38.09), width = 2.0,  length = 0.2,  options = { name = "route68_2", heading = 359, minZ = 37.09, maxZ = 39.49 } },
@@ -159,6 +178,10 @@ RobberyConfig = {
                     thermiteLoc = { coords = vector3(148.9605, -1047.058, 29.70366), heading = 165.708 },
                 },
                 doors = { vaultDoor = { object = 2121050683, step = -0.60, originalHeading = 249.846 } },
+                trolleys = { -- tune coords in-game
+                    { coords = vector4(150.903, -1045.597, 28.346, 125.074) },
+                    { coords = vector4(147.812, -1047.756, 28.346, 191.992) },
+                },
                 loots = {
                     { coords = vector3(149.93,  -1044.61, 29.37), width = 0.2,  length = 2.95, options = { name = "vespucci_1", heading = 340, minZ = 28.37, maxZ = 30.77 } },
                     { coords = vector3(151.48,  -1046.72, 29.37), width = 2.0,  length = 0.2,  options = { name = "vespucci_2", heading = 340, minZ = 28.37, maxZ = 30.77 } },
@@ -183,29 +206,30 @@ RobberyConfig = {
                     { 85, { name = "goldbar",  min = 50, max = 70 } },
                     { 15, { name = "moneybag", min = 1,  max = 1,  metadata = { CustomAmt = { Min = 40000, Random = 10000 } } } },
                 },
-                gems = {
-                    { 20, { name = "opal",     min = 1, max = 1 } },
-                    { 20, { name = "citrine",  min = 1, max = 1 } },
-                    { 20, { name = "amethyst", min = 1, max = 1 } },
-                    { 15, { name = "ruby",     min = 1, max = 1 } },
-                    { 15, { name = "sapphire", min = 1, max = 1 } },
-                    { 5,  { name = "emerald",  min = 1, max = 1 } },
-                    { 5,  { name = "diamond",  min = 1, max = 1 } },
-                },
+                -- gems loot disabled - gem trolley types are commented out for now
+                -- gems = {
+                --     { 20, { name = "opal",     min = 1, max = 1 } },
+                --     { 20, { name = "citrine",  min = 1, max = 1 } },
+                --     { 20, { name = "amethyst", min = 1, max = 1 } },
+                --     { 15, { name = "ruby",     min = 1, max = 1 } },
+                --     { 15, { name = "sapphire", min = 1, max = 1 } },
+                --     { 5,  { name = "emerald",  min = 1, max = 1 } },
+                --     { 5,  { name = "diamond",  min = 1, max = 1 } },
+                -- },
             },
         },
         -- hash = full trolley prop, empty = after looting, hand = prop held during loot anim
         trolleyTypes = {
             { hash = `hei_prop_hei_cash_trolly_01`,   empty = `hei_prop_hei_cash_trolly_03`,    hand = `hei_prop_heist_cash_pile`,  type = "cash" },
-            { hash = `ch_prop_cash_low_trolly_01a`,   empty = `mythic_prop_diamond_empty`,       hand = `hei_prop_heist_cash_pile`,  type = "cash" },
-            { hash = `ch_prop_cash_low_trolly_01b`,   empty = `mythic_prop_diamond_emptyb`,      hand = `hei_prop_heist_cash_pile`,  type = "cash" },
-            { hash = `ch_prop_cash_low_trolly_01c`,   empty = `mythic_prop_diamond_emptyc`,      hand = `hei_prop_heist_cash_pile`,  type = "cash" },
-            { hash = `ch_prop_ch_cash_trolly_01a`,    empty = `mythic_prop_diamond_empty`,       hand = `hei_prop_heist_cash_pile`,  type = "cash" },
-            { hash = `ch_prop_ch_cash_trolly_01b`,    empty = `mythic_prop_diamond_emptyb`,      hand = `hei_prop_heist_cash_pile`,  type = "cash" },
-            { hash = `ch_prop_ch_cash_trolly_01c`,    empty = `mythic_prop_diamond_emptyc`,      hand = `hei_prop_heist_cash_pile`,  type = "cash" },
-            { hash = `ch_prop_gold_trolly_01a`,       empty = `mythic_prop_diamond_empty`,       hand = `ch_prop_gold_bar_01a`,      type = "gold" },
-            { hash = `ch_prop_gold_trolly_01b`,       empty = `mythic_prop_diamond_emptyb`,      hand = `ch_prop_gold_bar_01a`,      type = "gold" },
-            { hash = `ch_prop_gold_trolly_01c`,       empty = `mythic_prop_diamond_emptyc`,      hand = `ch_prop_gold_bar_01a`,      type = "gold" },
+            { hash = `ch_prop_cash_low_trolly_01a`,   empty = `hei_prop_hei_cash_trolly_03`,    hand = `hei_prop_heist_cash_pile`,  type = "cash" },
+            { hash = `ch_prop_cash_low_trolly_01b`,   empty = `hei_prop_hei_cash_trolly_03`,    hand = `hei_prop_heist_cash_pile`,  type = "cash" },
+            { hash = `ch_prop_cash_low_trolly_01c`,   empty = `hei_prop_hei_cash_trolly_03`,    hand = `hei_prop_heist_cash_pile`,  type = "cash" },
+            { hash = `ch_prop_ch_cash_trolly_01a`,    empty = `hei_prop_hei_cash_trolly_03`,    hand = `hei_prop_heist_cash_pile`,  type = "cash" },
+            { hash = `ch_prop_ch_cash_trolly_01b`,    empty = `hei_prop_hei_cash_trolly_03`,    hand = `hei_prop_heist_cash_pile`,  type = "cash" },
+            { hash = `ch_prop_ch_cash_trolly_01c`,    empty = `hei_prop_hei_cash_trolly_03`,    hand = `hei_prop_heist_cash_pile`,  type = "cash" },
+            { hash = `ch_prop_gold_trolly_01a`,       empty = `hei_prop_hei_cash_trolly_03`,    hand = `ch_prop_gold_bar_01a`,      type = "gold" },
+            { hash = `ch_prop_gold_trolly_01b`,       empty = `hei_prop_hei_cash_trolly_03`,    hand = `ch_prop_gold_bar_01a`,      type = "gold" },
+            { hash = `ch_prop_gold_trolly_01c`,       empty = `hei_prop_hei_cash_trolly_03`,    hand = `ch_prop_gold_bar_01a`,      type = "gold" },
             -- gems trolleys (disabled until gem loot is tuned):
             -- { hash = `ch_prop_diamond_trolly_01a`, empty = `mythic_prop_diamond_empty`,    hand = `ch_prop_vault_dimaondbox_01a`, type = "gems" },
             -- { hash = `ch_prop_diamond_trolly_01b`, empty = `mythic_prop_diamond_emptyb`,   hand = `ch_prop_vault_dimaondbox_01a`, type = "gems" },

@@ -15,8 +15,9 @@ local _inUse = {
 	Loot = {},
 }
 
-local _inProgress = {}
-local _redDongies = {}
+local _inProgress   = {}
+local _redDongies   = {}
+local _trolleyState = {} -- [bankId][trolleyIndex] = true when looted
 
 local _triggered = {}
 
@@ -37,8 +38,17 @@ AddEventHandler("Characters:Server:PlayerDropped", ResetSource)
 function ResetFleeca(fleecaId)
 	_inProgress[fleecaId] = false
 	_fcGlobalReset[fleecaId] = nil
+	_trolleyState[fleecaId] = {}
+
+	if _fcLocs[fleecaId].trolleys then
+		for i, slot in ipairs(_fcLocs[fleecaId].trolleys) do
+			slot.trolley = _fcTrolleys[math.random(#_fcTrolleys)]
+			_trolleyState[fleecaId][i] = false
+		end
+	end
 
 	GlobalState[string.format("Fleeca:%s:VaultDoor", fleecaId)] = nil
+	GlobalState[string.format("FleecaRobberies:%s", fleecaId)] = _fcLocs[fleecaId]
 
 	if _fcLocs[fleecaId].loots ~= nil then
 		for k, v in ipairs(_fcLocs[fleecaId].loots) do
@@ -46,7 +56,14 @@ function ResetFleeca(fleecaId)
 		end
 	end
 
+	if _fcLocs[fleecaId].trolleys ~= nil then
+		for i = 1, #_fcLocs[fleecaId].trolleys do
+			GlobalState[string.format("Fleeca:%s:Loot:%s_trolley_%s", fleecaId, fleecaId, i)] = nil
+		end
+	end
+
 	TriggerClientEvent("Robbery:Client:Fleeca:CloseVaultDoor", -1, fleecaId)
+	TriggerClientEvent("Robbery:Client:Fleeca:ResetTrolleys", -1, fleecaId)
 	exports['ox_doorlock']:SetLock(string.format("%s_tills", fleecaId), true)
 	exports['ox_doorlock']:SetLock(string.format("%s_gate", fleecaId), true)
 	_triggered[fleecaId] = false
@@ -100,9 +117,13 @@ AddEventHandler("Robbery:Server:Setup", function()
 	local t = {}
 	for k, v in pairs(_fcLocs) do
 		_inProgress[v.id] = false
+		_trolleyState[v.id] = {}
 		table.insert(t, v.id)
-		for k, v in ipairs(v.loots) do
-			v.trolley = _fcTrolleys[math.random(#_fcTrolleys)]
+		if v.trolleys then
+			for i, slot in ipairs(v.trolleys) do
+				slot.trolley = _fcTrolleys[math.random(#_fcTrolleys)]
+				_trolleyState[v.id][i] = false
+			end
 		end
 		GlobalState[string.format("FleecaRobberies:%s", v.id)] = _fcLocs[v.id]
 	end
@@ -211,6 +232,17 @@ AddEventHandler("Robbery:Server:Setup", function()
 								end
 
 								if success then
+									local bankId   = pState.fleeca
+									local trolleys = _fcLocs[bankId].trolleys
+									local trolleyIndex, trolleyData
+									if trolleys and data.id:find("_trolley_") then
+										local ti = tonumber(data.id:match("_trolley_(%d+)$"))
+										if ti and _trolleyState[bankId] and not _trolleyState[bankId][ti] then
+											trolleyIndex = ti
+											trolleyData  = trolleys[ti].trolley
+											_trolleyState[bankId][ti] = true
+										end
+									end
 									local lootData = _fcLocs[pState.fleeca].loots[data.index]
 									exports['pulsar-core']:LoggerInfo(
 										"Robbery",
@@ -231,7 +263,7 @@ AddEventHandler("Robbery:Server:Setup", function()
 									end
 
 									exports.ox_inventory:LootCustomWeightedSetWithCount(
-										_vaultLoot.trolley[lootData?.trolley?.type or "cash"],
+										_vaultLoot.trolley[trolleyData?.type or "cash"],
 										char:GetData("SID"), 1)
 									if math.random(100) <= 3 then
 										exports.ox_inventory:AddItem(char:GetData("SID"), "crypto_voucher", 1, {
@@ -257,7 +289,7 @@ AddEventHandler("Robbery:Server:Setup", function()
 									StartAutoCDTimer(pState.fleeca)
 									GlobalState[string.format("Fleeca:Disable:%s", pState.fleeca)] = true
 									exports['pulsar-hud']:Notification(source, "success", "Vault Looted", 5000)
-									TriggerClientEvent("Robbery:Client:Fleeca:LootSuccess", source, pState.fleeca, data.index, lootData.trolley)
+									TriggerClientEvent("Robbery:Client:Fleeca:LootSuccess", source, pState.fleeca, trolleyIndex, trolleyData)
 								end
 
 								_inUse.Loot[data.id] = false
@@ -282,6 +314,96 @@ AddEventHandler("Robbery:Server:Setup", function()
 				)
 			end
 		end
+	end)
+
+	exports["pulsar-core"]:RegisterServerCallback("Robbery:Fleeca:GrabTrolley", function(source, data, cb)
+		local char = exports['pulsar-characters']:FetchCharacterSource(source)
+		if not char then return end
+
+		local bankId = data.bankId
+		if not bankId or not _fcLocs[bankId] then return end
+
+		local vaultDoor = GlobalState[string.format("Fleeca:%s:VaultDoor", bankId)]
+		if not vaultDoor or vaultDoor.state ~= 3 then return end
+
+		local trolleyIndex = data.index
+		if not trolleyIndex or not _fcLocs[bankId].trolleys or not _fcLocs[bankId].trolleys[trolleyIndex] then return end
+
+		local lootKey = string.format("Fleeca:%s:Loot:%s", bankId, data.id)
+		if GlobalState[lootKey] ~= nil then return end
+
+		if GlobalState["RestartLockdown"] ~= false and (GetGameTimer() < _fc.serverStartWait or (GlobalState["RestartLockdown"] and not _inProgress[bankId])) then
+			exports['pulsar-hud']:Notification(source, "error", "You Notice The Door Is Barricaded For A Storm, Maybe Check Back Later", 6000)
+			return
+		end
+		if (GlobalState["Duty:police"] or 0) < _fc.requiredPolice and not _inProgress[bankId] then
+			exports['pulsar-hud']:Notification(source, "error", "Enhanced Security Measures Enabled, Maybe Check Back Later When Things Feel Safer", 6000)
+			return
+		end
+		if GlobalState['RobberiesDisabled'] then
+			exports['pulsar-hud']:Notification(source, "error", "Temporarily Disabled, Please See City Announcements", 6000)
+			return
+		end
+
+		if _inUse.Loot[data.id] then
+			exports['pulsar-hud']:Notification(source, "error", "Someone Is Already Interacting With This", 6000)
+			return
+		end
+		if _trolleyState[bankId][trolleyIndex] then return end
+
+		_inUse.Loot[data.id] = source
+		_inProgress[bankId]  = true
+		_trolleyState[bankId][trolleyIndex] = true
+
+		local trolleyData = _fcLocs[bankId].trolleys[trolleyIndex].trolley
+
+		exports['pulsar-core']:LoggerInfo("Robbery", string.format(
+			"%s %s (%s) Grabbed Trolley %s At Fleeca %s",
+			char:GetData("First"), char:GetData("Last"), char:GetData("SID"),
+			trolleyIndex, bankId
+		))
+
+		if _robberyAlerts[bankId] == nil or _robberyAlerts[bankId] < os.time() then
+			exports['pulsar-robbery']:TriggerPDAlert(
+				source,
+				_fcLocs[bankId].coords,
+				"10-90",
+				"Armed Robbery",
+				{ icon = 586, size = 0.9, color = 31, duration = (60 * 5) },
+				{ icon = "building-columns", details = string.format("Fleeca Bank - %s", _fcLocs[bankId].label) },
+				bankId
+			)
+			_robberyAlerts[bankId] = os.time() + 60 * 20
+		end
+
+		if not GlobalState["AntiShitlord"] or os.time() >= GlobalState["AntiShitlord"] then
+			GlobalState["AntiShitlord"] = os.time() + (60 * math.random(10, 15))
+		end
+
+		exports.ox_inventory:LootCustomWeightedSetWithCount(
+			_vaultLoot.trolley[trolleyData?.type or "cash"],
+			char:GetData("SID"), 1
+		)
+
+		if not _fcGlobalReset[bankId] or os.time() > _fcGlobalReset[bankId] then
+			_fcGlobalReset[bankId] = os.time() + (60 * 60 * math.random(_fc.cooldown.min, _fc.cooldown.max))
+		end
+
+		GlobalState[lootKey] = _fcGlobalReset[bankId]
+		StartAutoCDTimer(bankId)
+		GlobalState[string.format("Fleeca:Disable:%s", bankId)] = true
+
+		exports['pulsar-hud']:Notification(source, "success", "Vault Looted", 5000)
+		TriggerClientEvent("Robbery:Client:Fleeca:LootSuccess", source, bankId, trolleyIndex, trolleyData)
+
+		local emptyModel = trolleyData and trolleyData.empty or nil
+		for _, playerId in ipairs(GetPlayers()) do
+			if tonumber(playerId) ~= source then
+				TriggerClientEvent("Robbery:Client:Fleeca:TrolleySwap", tonumber(playerId), bankId, trolleyIndex, emptyModel)
+			end
+		end
+
+		_inUse.Loot[data.id] = false
 	end)
 
 	exports["pulsar-core"]:RegisterServerCallback("Robbery:Fleeca:SecureBank", function(source, data, cb)
@@ -723,6 +845,28 @@ AddEventHandler("Robbery:Server:Setup", function()
 			end
 		end
 	end)
+
+	exports["pulsar-chat"]:RegisterAdminCommand("openfleecavault", function(source, args, rawCommand)
+		local bankId = args[1]
+		if not bankId or not _fcLocs[bankId] then
+			exports['pulsar-hud']:Notification(source, "error", "Invalid Fleeca ID (e.g. fleeca_sandy)")
+			return
+		end
+		_inProgress[bankId] = true
+		GlobalState[string.format("Fleeca:%s:VaultDoor", bankId)] = { state = 3 }
+		TriggerClientEvent("Robbery:Client:Fleeca:OpenVaultDoor", -1, bankId)
+		StartAutoCDTimer(bankId)
+		exports['pulsar-hud']:Notification(source, "success",
+			string.format("Fleeca %s vault forced open", _fcLocs[bankId].label))
+	end, {
+		help = "Force open a Fleeca vault door (bypasses minigame) for testing",
+		params = {
+			{
+				name = "Fleeca ID",
+				help = "ID of the Fleeca to open (e.g. fleeca_sandy, fleeca_paleto)",
+			},
+		},
+	}, 1)
 
 	exports.ox_inventory:RegisterUse("moneybag", "FleecaRobbery", function(source, itemData)
 		local char = exports['pulsar-characters']:FetchCharacterSource(source)
