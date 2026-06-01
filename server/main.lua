@@ -231,10 +231,10 @@ AddEventHandler('onResourceStart', function(resource)
             local receivingItem = exports.ox_inventory:ItemsGetData(v.receiving)
 
             if exports.ox_inventory:Remove(char:GetData("SID"), 1, v.giving, 1) then
-              if exports.ox_inventory:AddItem(char:GetData("SID"), v.receiving, 1, {}, 1) then
+              if exports.ox_inventory:AddItem(source, v.receiving, 1, {}, 1) then
                 table.remove(_pickups[char:GetData("SID")], i)
               else
-                exports.ox_inventory:AddItem(char:GetData("SID"), v.giving, 1, {}, 1)
+                exports.ox_inventory:AddItem(source, v.giving, 1, {}, 1)
                 exports['pulsar-hud']:Notification(source, "error",
                   string.format("Failed Adding x1 %s", receivingItem.label),
                   6000

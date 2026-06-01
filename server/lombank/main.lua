@@ -256,7 +256,7 @@ AddEventHandler("Robbery:Server:Setup", function()
 
 				if math.random(100) <= (7 * _trolleysLooted) and not _heistCoin then
 					_heistCoin = true
-					exports.ox_inventory:AddItem(char:GetData("SID"), "crypto_voucher", 1, {
+					exports.ox_inventory:AddItem(source, "crypto_voucher", 1, {
 						CryptoCoin = "HEIST",
 						Quantity = 8,
 					}, 1)

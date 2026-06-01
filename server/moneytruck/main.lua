@@ -223,7 +223,7 @@ AddEventHandler("Robbery:Server:Setup", function()
 						if model == `stockade` then
 							exports.ox_inventory:LootCustomWeightedSetWithCount(_bct.loot.fleeca,
 								char:GetData("SID"), 1)
-							exports.ox_inventory:AddItem(char:GetData("SID"), "crypto_voucher", 1, {
+							exports.ox_inventory:AddItem(source, "crypto_voucher", 1, {
 								CryptoCoin = "HEIST",
 								Quantity = math.random(5, 6),
 							}, 1)

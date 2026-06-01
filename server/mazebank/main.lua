@@ -688,7 +688,7 @@ AddEventHandler("Robbery:Server:Setup", function()
 									if not _purpDongie then
 										if math.random(100) <= 10 then
 											_purpDongie = source
-											exports.ox_inventory:AddItem(char:GetData("SID"), "purple_dongle", 1,
+											exports.ox_inventory:AddItem(source, "purple_dongle", 1,
 												{}, 1)
 										end
 									end
@@ -790,7 +790,7 @@ AddEventHandler("Robbery:Server:Setup", function()
 								data = {},
 							}, function(success)
 								if success then
-									newValue = slot.CreateDate - (60 * 60 * 12)
+									local newValue = slot.CreateDate - (60 * 60 * 12)
 									if type(itemData.durability) == 'number' and os.time() - itemData.durability >= newValue then
 										exports.ox_inventory:RemoveId(slot.Owner, slot.invType, slot)
 									else
@@ -818,14 +818,14 @@ AddEventHandler("Robbery:Server:Setup", function()
 
 									GlobalState["Fleeca:Disable:mazebank_baycity"] = true
 									GlobalState[string.format("MazeBank:Offices:PC:%s", data.id)] = _mbGlobalReset
-									exports.ox_inventory:AddItem(char:GetData("SID"), "crypto_voucher", 1, {
+									exports.ox_inventory:AddItem(source, "crypto_voucher", 1, {
 										CryptoCoin = "MALD",
 										Quantity = math.random(120, 200),
 									}, 1)
 
 									if math.random(100) <= (33 * _officesLooted) and not _heistCoin then
 										_heistCoin = true
-										exports.ox_inventory:AddItem(char:GetData("SID"), "crypto_voucher", 1, {
+										exports.ox_inventory:AddItem(source, "crypto_voucher", 1, {
 											CryptoCoin = "HEIST",
 											Quantity = 6,
 										}, 1)

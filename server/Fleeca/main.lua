@@ -266,7 +266,7 @@ AddEventHandler("Robbery:Server:Setup", function()
 										_vaultLoot.trolley[trolleyData?.type or "cash"],
 										char:GetData("SID"), 1)
 									if math.random(100) <= 3 then
-										exports.ox_inventory:AddItem(char:GetData("SID"), "crypto_voucher", 1, {
+										exports.ox_inventory:AddItem(source, "crypto_voucher", 1, {
 											CryptoCoin = "HEIST",
 											Quantity = 4
 										}, 1)
@@ -275,7 +275,7 @@ AddEventHandler("Robbery:Server:Setup", function()
 									if _redDongies[pState.fleeca] == nil then
 										if data.index > 2 and math.random(100) <= (1 * data.index) then
 											_redDongies[pState.fleeca] = source
-											exports.ox_inventory:AddItem(char:GetData("SID"), "red_dongle", 1, {},
+											exports.ox_inventory:AddItem(source, "red_dongle", 1, {},
 												1)
 										end
 									end

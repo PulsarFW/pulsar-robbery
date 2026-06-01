@@ -406,13 +406,13 @@ AddEventHandler("Robbery:Server:Setup", function()
 			exports.ox_inventory:LootCustomWeightedSetWithCount(_safeLoot, char:GetData("SID"), 1)
 
 			if math.random(100) <= 5 then
-				exports.ox_inventory:AddItem(char:GetData("SID"), "green_dongle", 1, {}, 1)
-				exports.ox_inventory:AddItem(char:GetData("SID"), "crypto_voucher", 1, {
+				exports.ox_inventory:AddItem(source, "green_dongle", 1, {}, 1)
+				exports.ox_inventory:AddItem(source, "crypto_voucher", 1, {
 					CryptoCoin = "HEIST",
 					Quantity = 2,
 				}, 1)
 			elseif math.random(100) <= 15 then
-				exports.ox_inventory:AddItem(char:GetData("SID"), "gps_tracker", 1, {}, 1)
+				exports.ox_inventory:AddItem(source, "gps_tracker", 1, {}, 1)
 			end
 
 			exports['pulsar-core']:LoggerInfo(
