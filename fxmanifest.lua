@@ -1,6 +1,6 @@
 name("Pulsar Framework Robbery")
 author("[Alzar, Dr Nick]")
-version '1.0.6'
+version '1.0.7'
 lua54("yes")
 fx_version("cerulean")
 game("gta5")
